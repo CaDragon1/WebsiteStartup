@@ -1,0 +1,14 @@
+header {
+    flex: 0 100px;
+    color: inherit;
+    text-decoration: none;
+}
+
+#about {
+    justify-content: left;
+    margin-left: 120px;
+}
+
+#about-website {
+    padding:15px;
+}

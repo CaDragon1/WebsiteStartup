@@ -1,0 +1,32 @@
+header {
+    flex: 0 100px;
+    color: inherit;
+    text-decoration: none;
+}
+
+#goal-menu {
+    align-items: center;
+}
+
+.goal-list {
+    position: relative;
+    display: block;
+    padding: 10px;
+    background-color: #25252556;
+    border: 1px solid #f3f3f3;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-family: sans-serif;
+    color: white;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: space-around;
+
+}
+
+footer {
+    flex: 0 30 px;
+}
