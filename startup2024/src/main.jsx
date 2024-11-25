@@ -32,6 +32,10 @@ export default function Main() {
                         </li>
                     </menu>
                 </nav>
+                <div className="status-bar">
+                    <div className="status-item" id="tasks">Current Tasks: 0</div>
+                    <div className="status-item" id="score">Score: 0</div>
+                </div>
             </header>
 
             <Routes>
