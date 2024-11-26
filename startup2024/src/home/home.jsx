@@ -6,6 +6,8 @@ export function Home() {
     // Goal list and completed goal list set
     const [goals, setGoals] = useState([]);
     const [completedGoals, setCompletedGoals] = useState([]);
+    // States for controlling various objects' visibilities
+    const [addNewGoal, setAddNewGoal] = useState(false);
 
     // Use the setGoals (setState) function of useState to update the list of goals. 
     // Pulling a user's goal list from a database dependent on the user will happen later in development.
@@ -13,13 +15,51 @@ export function Home() {
         setGoals([...goals, goal]);
     };
 
+    // Function to display a goal list. I learned how to use the .map() function for this.
+    function displayGoalList() {
+        return (
+            <ul className = "goal-list">
+                {goals.map((goal, index) => (
+                    <li key={index} className = "goal-list-object">
+                        {goal.title}
+                        <button className = "btn btn-outline-dark" onClick={() =>} >view info</button>
+                        <button className = "btn btn-outline-success" onClick={() => completeGoal(goal.title)}>complete</button>
+                    </li>
+                ))}
+            </ul>
+        );
+    }
+    
+    // Function to show the options for creating a new goal
+    function newGoal({submit, cancel}) {
+        const [title, setTitle] = useState("");
+        const [deadline, setDeadline] = useState("");
+        
+        // Subfunction for submission because I can't figure out how to separate it from the function
+        function Submit() {
+            submit(createGoal(title, new DataTransfer(deadline)));
+            // I clear the text field and deadline as indication that the goal submitted
+            setTitle("");
+            setDeadline("");
+        }
+
+        return (
+            <form submit={Submit}>
+                <input type="text" value={title} onChange={(typed) => setTitle(typed.target.value)} placeholder="Goal Title" required/>
+                <input type="date" value={deadline} onChange={(selected) => setDeadline(selected.target.value)}/>
+            <button type="submit">Add New Goal</button>
+            <button type="button" onClick = {cancel}>Cancel</button>
+            </form>
+        );
+    }
+
     // Function to create a new goal object. 
     // Turns out, adding a goal id only works for manipulation if we do some hashing to make it unique, so I'll use the title for removal instead.
     function createGoal(title, deadline) {
         return {
             title,
             deadline,
-            dateCreated = new Date(),
+            dateCreated: new Date(),
             completed: false
         };
     };
@@ -39,42 +79,23 @@ export function Home() {
     }
 
     return(
-        // <main>
-        //     <div className="container-fluid">
-        //         <nav className="navbar navbar-expand-lg navbar-dark bg-light" id="goal-menu">
-        //             <div className="goal-list">Current Goals
-        //                 <button type="button" className="btn btn-outline-primary" data-toggle="button">New Goal</button>
-        //             </div>
-        //         </nav>
-        //         <ul className="list-group">
-        //             <li className="list-group-item">Goal 1
-        //                 <button className="btn btn-outline-dark">view info</button>
-        //                 <button className="btn btn-outline-danger">delete</button>
-        //                 <button className="btn btn-outline-success">complete</button>
-        //             </li>
-        //             <li className="list-group-item">Goal 2
-        //                 <button className="btn btn-outline-dark">view info</button>
-        //                 <button className="btn btn-outline-danger">delete</button>
-        //                 <button className="btn btn-outline-success">complete</button>
-        //             </li>
-        //             <li className="list-group-item">Goal 3
-        //                 <button className="btn btn-outline-dark">view info</button>
-        //                 <button className="btn btn-outline-danger">delete</button>
-        //                 <button className="btn btn-outline-success">complete</button>
-        //             </li>
-        //             <li className="list-group-item">Goal 4
-        //                 <button className="btn btn-outline-dark">view info</button>
-        //                 <button className="btn btn-outline-danger">delete</button>
-        //                 <button className="btn btn-outline-success">complete</button>
-        //             </li>
-        //         </ul>
-        //     </div>
+        <>
+            <main>
+                <div className="container-fluid">
+                    <nav className="navbar navbar-expand-lg navbar-dark bg-light" id="goal-menu">
+                        <div className="goal-list">Current Goals
+                            <button type="button" className="btn btn-outline-primary" onClick={() => newGoal(true)}>New Goal</button>
+                        </div>
+                    </nav>
+                    
+                </div>
 
-        //     <div className="google-calendar">Google Calendar Placeholder</div>
-        // </main>
+                <div className="google-calendar">Google Calendar Placeholder</div>
+            </main>
 
-        // <footer>
-        //     <a href="https://github.com/CaDragon1/startup" target="_blank" style="font-size: 18px; color:rgb(0, 0, 0); font-weight: bold;">Github Repository</a>  
-        // </footer>
+            <footer>
+                <a href="https://github.com/CaDragon1/startup" target="_blank" style="font-size: 18px; color:rgb(0, 0, 0); font-weight: bold;">Github Repository</a>  
+            </footer>
+        </>
     );
 }
