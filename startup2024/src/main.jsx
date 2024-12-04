@@ -16,7 +16,7 @@ export default function Main() {
                     <div className="logo">GOAL SECRETARY</div>
                     <menu className='navbar-nav'>
                         <li className="navbar-item">
-                        <NavLink className='nav-link' to="home">Home</NavLink>
+                            <NavLink className='nav-link' to="home">Home</NavLink>
                         </li>
                         <li className="navbar-item">
                             <NavLink className='nav-link' to="notebook">Notebook</NavLink>
@@ -28,7 +28,7 @@ export default function Main() {
                             <NavLink className='nav-link' to="account">My Account</NavLink>
                         </li>
                         <li className="navbar-item">
-                        <NavLink className='nav-link' to="">Login</NavLink>
+                            <NavLink className='nav-link' to="">Login</NavLink>
                         </li>
                     </menu>
                 </nav>
@@ -48,4 +48,8 @@ export default function Main() {
             </Routes>
         </BrowserRouter>
     );
+}
+
+function NotFound() {
+    return (<div>Page not found</div>);
 }

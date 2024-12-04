@@ -6,7 +6,7 @@ export function Login(){
     <main className="container-fluid bg-secondary text-center">
         <div>
             <h1>Please enter your login info!</h1>
-            <form method="get" action="home.html">
+            <form method="get" action="home.jsx">
                 <div className="input-group mb-3">
                     <span className="input-group-text">@</span>
                     <input className="form-control" type="text" placeholder="your@email.com" />

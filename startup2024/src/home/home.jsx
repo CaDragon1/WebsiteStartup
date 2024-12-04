@@ -8,6 +8,7 @@ export function Home() {
     const [completedGoals, setCompletedGoals] = useState([]);
     // States for controlling various objects' visibilities
     const [addNewGoal, setAddNewGoal] = useState(false);
+    // const [expandInfo, setExpandInfo] = useState(null);
 
     // Use the setGoals (setState) function of useState to update the list of goals. 
     // Pulling a user's goal list from a database dependent on the user will happen later in development.
@@ -15,36 +16,67 @@ export function Home() {
         setGoals([...goals, goal]);
     };
 
-    // Function to display a goal list. I learned how to use the .map() function for this.
+    // Function to display a goal list. I learned how to use the .map() function for this. 
+    // Also learned that there is a <strong> tag that typically does what <b> does, but can be changed for better styling.
+    // I can dynamically change a className, allowing for better css styling.
     function displayGoalList() {
         return (
-            <ul className = "goal-list">
+            <ul className = "goal-list list-unstyled">
                 {goals.map((goal, index) => (
+                    <React.Fragment key={index}>
                     <li key={index} className = "goal-list-object">
                         {goal.title}
-                        <button className = "btn btn-outline-dark" onClick={() =>} >view info</button>
+                        <button className = "btn btn-outline-dark" onClick={() => expandGoal(goal)} >view info</button>
                         <button className = "btn btn-outline-success" onClick={() => completeGoal(goal.title)}>complete</button>
                     </li>
+                    {goal.expanded && (
+                        <li className = "goal-info bg-light p-3 mb-3 rounded">
+                            <div className='row'>
+                                <div className = "col-md-6">
+                                    <p><strong>DUE: </strong>{goal.deadline}</p>
+                                </div>
+                                <div className = "col-md-6">
+                                    <button className="btn btn-danger" onClick={() => removeGoal(goal.title)}>Delete</button>
+                                </div>
+                            </div>
+                            <div className='row mt-2'>
+                                <div className = "col-md-6">
+                                    <p>date created: {goal.dateCreated}</p>
+                                </div>
+                                <div className = "col-md-6">
+                                    <span className = {`${goal.completed ? "bg-success" : "bg-warning"}`}>
+                                        {goal.completed ? "Completed" : "Not Complete"}
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                    )}
+                    </React.Fragment>
                 ))}
             </ul>
         );
     }
+
+    // Function to change the expanded trigger in a goal object
+    function expandGoal(goalObject) {
+        setGoals(goals.map((e) => e.title === goalObject.title ? {...e, expanded: !e.expanded} : e))
+    }
     
     // Function to show the options for creating a new goal
-    function newGoal({submit, cancel}) {
+    function NewGoal({onSubmit, cancel}) {
         const [title, setTitle] = useState("");
         const [deadline, setDeadline] = useState("");
         
         // Subfunction for submission because I can't figure out how to separate it from the function
         function Submit() {
-            submit(createGoal(title, new DataTransfer(deadline)));
+            onSubmit(createGoal(title, new Date(deadline)));
             // I clear the text field and deadline as indication that the goal submitted
             setTitle("");
             setDeadline("");
         }
 
         return (
-            <form submit={Submit}>
+            <form onSubmit={Submit}>
                 <input type="text" value={title} onChange={(typed) => setTitle(typed.target.value)} placeholder="Goal Title" required/>
                 <input type="date" value={deadline} onChange={(selected) => setDeadline(selected.target.value)}/>
             <button type="submit">Add New Goal</button>
@@ -60,7 +92,8 @@ export function Home() {
             title,
             deadline,
             dateCreated: new Date(),
-            completed: false
+            completed: false,
+            expanded: false
         };
     };
 
@@ -84,18 +117,22 @@ export function Home() {
                 <div className="container-fluid">
                     <nav className="navbar navbar-expand-lg navbar-dark bg-light" id="goal-menu">
                         <div className="goal-list">Current Goals
-                            <button type="button" className="btn btn-outline-primary" onClick={() => newGoal(true)}>New Goal</button>
+                            <button type="button" className="btn btn-outline-primary" onClick={() => setAddNewGoal(true)}>New Goal</button>
+                            {addNewGoal && (
+                                <NewGoal onSubmit={(goal) => {addGoal(goal);
+                                    setAddNewGoal(false);
+                                }}
+                                cancel={() => setAddNewGoal(false)}
+                                />)
+                            }
                         </div>
                     </nav>
-                    
+                    {displayGoalList()}
                 </div>
 
                 <div className="google-calendar">Google Calendar Placeholder</div>
             </main>
 
-            <footer>
-                <a href="https://github.com/CaDragon1/startup" target="_blank" style="font-size: 18px; color:rgb(0, 0, 0); font-weight: bold;">Github Repository</a>  
-            </footer>
         </>
     );
 }
