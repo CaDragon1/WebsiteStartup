@@ -85,3 +85,7 @@ document.body.appendChild(newDiv);
 element.addEventListener('click', myFunction(){
     console.log('*click*');
 });
+
+Filetypes
+- file.type contains the MIME type of a given file (such as image/jpeg) and, therefore, you can use substr() method to extract characters from this string to tell what type a file has.
+- If uploading a file, it's good practice to also create a temporary URL for preview purposes. You can use the URL.createObjectURL(file) function to create a preview url.

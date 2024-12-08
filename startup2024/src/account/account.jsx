@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './account.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export function Account() {
+    // Constants for the profile picture, including a usestate for state changes
+    // Storing the file object:
+    const [profilePic, setProfilePic] = useState("profile_placeholder.png");
+    // Storing an image preview using temporary URL:
+    const [tempURL, setTempURL] = useState("/profile_placeholder.png");
+
+    // Functions for handling profile picture
+    function changePicture(eventParam) {
+        const newPic = eventParam.target.files[0];
+        // Check if the given file is a png or jpg
+        if (newPic && newPic.substr(0, 5) === "image") {
+            setProfilePic(newPic);
+            setTempURL(URL.createObjectURL(newPic));
+        }
+        else {
+            setProfilePic("/profile_placeholder.png");
+            setTempURL("/profile_placeholder.png");
+        }
+    }
+
     return(
         <main>
             <div className="container mt-4" id="account-block">
@@ -10,8 +30,13 @@ export function Account() {
                 <div className="row">
                     {/* Column 1 in the account panel */}
                     <div className="col-md-2 bg-light border" id="account-info">
-                        <img src="../../images/profile_placeholder.png" alt="Profie Picture" id="profile-picture" class="img-fluid mb-3" />
+                        <img src={tempURL || "profile_placeholder.png"} alt="Profie Picture" id="profile-picture" class="img-fluid mb-3" />
                         <br />
+                        <div className = "input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Change Profile Image...</span>
+                            </div>
+                        </div>
                         <button type="button" class="btn btn-secondary" id="change-profile">Change profile image</button>
                     </div>
                     {/* Column 2 in the account panel */}

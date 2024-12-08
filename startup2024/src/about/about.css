@@ -4,11 +4,22 @@ header {
     text-decoration: none;
 }
 
+.row {
+    display: flex;
+    width: 100%;
+}
+
 #about {
     justify-content: left;
     margin-left: 120px;
 }
 
 #about-website {
+    flex: 1;
+    padding:15px;
+}
+
+#github-link {
+    flex: 1;
     padding:15px;
 }

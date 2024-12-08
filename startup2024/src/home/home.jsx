@@ -25,9 +25,11 @@ export function Home() {
                 {goals.map((goal, index) => (
                     <React.Fragment key={index}>
                     <li key={index} className = "goal-list-object">
-                        {goal.title}
-                        <button className = "btn btn-outline-dark" onClick={() => expandGoal(goal)} >view info</button>
-                        <button className = "btn btn-outline-success" onClick={() => completeGoal(goal.title)}>complete</button>
+                        <p className = "h5">{goal.title}</p>
+                        <div className="button-container">
+                            <button className = "btn btn-outline-dark" id="info-button" onClick={() => expandGoal(goal)} >view info</button>
+                            <button className = "btn btn-outline-success" id="complete-button" onClick={() => completeGoal(goal.title)}>complete</button>
+                        </div>
                     </li>
                     {goal.expanded && (
                         <li className = "goal-info bg-light p-3 mb-3 rounded">
@@ -36,17 +38,18 @@ export function Home() {
                                     <p><strong>DUE: </strong>{goal.deadline}</p>
                                 </div>
                                 <div className = "col-md-6">
-                                    <button className="btn btn-danger" onClick={() => removeGoal(goal.title)}>Delete</button>
-                                </div>
-                            </div>
-                            <div className='row mt-2'>
-                                <div className = "col-md-6">
-                                    <p>date created: {goal.dateCreated}</p>
-                                </div>
-                                <div className = "col-md-6">
                                     <span className = {`${goal.completed ? "bg-success" : "bg-warning"}`}>
                                         {goal.completed ? "Completed" : "Not Complete"}
                                     </span>
+                                </div>
+                            </div>
+                            <div className='row'>
+                                <div className = "col-md-6">
+                                    <p>date created: {goal.dateCreated}</p>
+                                </div>
+                                
+                                <div className = "col-md-6">
+                                    <button className="btn btn-danger" onClick={() => removeGoal(goal.title)}>Delete</button>
                                 </div>
                             </div>
                         </li>
@@ -59,7 +62,9 @@ export function Home() {
 
     // Function to change the expanded trigger in a goal object
     function expandGoal(goalObject) {
-        setGoals(goals.map((e) => e.title === goalObject.title ? {...e, expanded: !e.expanded} : e))
+        setGoals(goals.map((e) => e.title === goalObject.title ? {...e, expanded: !e.expanded, 
+            deadline: e.deadline instanceof Date ? e.deadline.toLocaleDateString() : e.deadline,
+        dateCreated: e.dateCreated instanceof Date ? e.dateCreated.toLocaleDateString() : e.dateCreated} : e))
     }
     
     // Function to show the options for creating a new goal
