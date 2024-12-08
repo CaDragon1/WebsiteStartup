@@ -92,5 +92,7 @@ Filetypes
 
 API Calls
 - Context providers are a cool way of enclosing your html to provide access to the api through the app. Example:
+    import React, { createContext } from 'react';
+    export const CalendarContext = createContext(null);
     <CalendarContext.Provider value={apiCalendar}>
     </CalendarContext.Provider>
