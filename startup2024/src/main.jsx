@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import ApiCalendar from 'react-google-calendar-api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './main.css';
 import { Login } from './login/login'
@@ -7,6 +8,21 @@ import { About } from './about/about'
 import { Account } from './account/account'
 import { Home } from './home/home'
 import { Notebook } from './notebook/notebook'
+
+// Configure Google Calendar
+const config = {
+    clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+    apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    scope: "https://www.googleapis.com/auth/calendar",
+    discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
+};
+
+const apiCalendar = new ApiCalendar(config);
+
+// Error handle the calendar api key
+if(!process.env.REACT_APP_GOOGLE_API_KEY) {
+    console.error("No Google API key found in .env file.");
+}
 
 export default function Main() {
     return (

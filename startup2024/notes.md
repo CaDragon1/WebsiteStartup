@@ -89,3 +89,8 @@ element.addEventListener('click', myFunction(){
 Filetypes
 - file.type contains the MIME type of a given file (such as image/jpeg) and, therefore, you can use substr() method to extract characters from this string to tell what type a file has.
 - If uploading a file, it's good practice to also create a temporary URL for preview purposes. You can use the URL.createObjectURL(file) function to create a preview url.
+
+API Calls
+- Context providers are a cool way of enclosing your html to provide access to the api through the app. Example:
+    <CalendarContext.Provider value={apiCalendar}>
+    </CalendarContext.Provider>
