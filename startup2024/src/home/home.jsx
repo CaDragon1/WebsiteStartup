@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { Calendar } from '@fullcalendar/core'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import { CalendarContext } from '../main';
 import './home.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Including fullcalendar from fullcalendar.io to display the user's Google Calendar
 
 export function Home() {
     // Goal list and completed goal list set
