@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { CalendarContext } from '../main';
@@ -6,6 +6,7 @@ import './home.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Including fullcalendar from fullcalendar.io to display the user's Google Calendar
+// Also including useEffect so that the app can load the user's calendar on the side.
 
 export function Home() {
     // Goal list and completed goal list set
@@ -14,6 +15,48 @@ export function Home() {
     // States for controlling various objects' visibilities
     const [addNewGoal, setAddNewGoal] = useState(false);
     // const [expandInfo, setExpandInfo] = useState(null);
+
+    // Adding calendar components
+    const calendarApi = useContext(CalendarContext);
+    const [event, setEvent] = useState([]);
+    const [signedIn, setSignedIn] = useState(false);
+    const calendarRef = useRef(null);
+
+    // UseEffect function. This bit was complicated and unfamiliar, so I had an AI help me figure out how to use useEffect. The ref was added when I realized I installed the core package for fullcalendar, not the react package. Things didn't work.
+    useEffect(() => {
+        if (signedIn && calendarRef.current) {
+            const calendar = new Calendar(calendarRef.current, {
+                plugins: [dayGridPlugin],
+                initialView: "dayGridMonth",
+                events: event.map(e => ({
+                    title: e.summary,
+                    start: e.starte.dateTime || e.start.date,
+                    end: e.end.dateTime || e.end.date,
+                }))
+            });
+            calendar.render();
+
+            // Destroy the calendar when done with it
+            return () => {
+                calendar.destroy();
+            };
+        }
+    }, [signedIn, event]);
+
+    // Now I need a function to grab the events from someone's Google calendar. I'm using documentation to help learn about the api and AI to explain the relevant documentation.
+    const getEvents = async () => {
+        // error handling because it broke without it
+        try {
+            const primaryEvents = await calendarApi.listUpcomingEvents(20);
+            setEvent(primaryEvents.result.items);
+        } catch(error) {
+            console.error("Error getting events from calendar: ", error)
+        }
+    }
+
+    const signIn = () => {
+        calendarApi.handleAuthClick();
+    }
 
     // Use the setGoals (setState) function of useState to update the list of goals. 
     // Pulling a user's goal list from a database dependent on the user will happen later in development.
@@ -140,7 +183,16 @@ export function Home() {
                     {displayGoalList()}
                 </div>
 
-                <div className="google-calendar">Google Calendar Placeholder</div>
+                <div className="google-calendar">
+                    {signedIn ? (
+                        <div ref={ calendarRef }></div>) 
+                        : ( 
+                        <div>
+                            <p className="signin-message">Sign in to your google account for calendar integration!</p>
+                            <button type="button" className="btn btn-success" onClick={signIn}>Connect Google Account</button>
+                        </div>
+                    )}
+                </div>
             </main>
 
         </>

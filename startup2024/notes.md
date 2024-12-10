@@ -96,3 +96,18 @@ API Calls
     export const CalendarContext = createContext(null);
     <CalendarContext.Provider value={apiCalendar}>
     </CalendarContext.Provider>
+
+React
+- useEffect allows for side effects in your react application. Helps you to have a component with external systems.
+    Basic setup:
+        useEffect(() => { //code here }, []);
+    This runs once after the initial render.
+    Running on state change:
+        useEffect(() => { //code here }, [valueHere]);
+    Cleanup upon unmount:
+        useEffect(() => { //code here 
+            return () => { //cleanup code };
+        }, []);
+- For asynchronous operations such as useEffect, if you use the "await" keyword, the async function is paused until a Promise is met.
+- useRef is a React hook that creates a mutable refrence that persists across component re-renders. 
+    It can store any value, and an update doesn't rerender the component. It also allows you to create a reference to a DOM element.

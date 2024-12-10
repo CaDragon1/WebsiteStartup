@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { CalendarContext } from '../main';
 import './account.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -8,6 +9,21 @@ export function Account() {
     const [profilePic, setProfilePic] = useState("profile_placeholder.png");
     // Storing an image preview using temporary URL:
     const [tempURL, setTempURL] = useState("/profile_placeholder.png");
+    const calendarApi = useContext(CalendarContext);
+    const [signedIn, setSignedIn] = useState(false);
+
+    const googleSignIn = () => {
+        calendarApi.handleAuthClick();
+    }
+    
+    // useEffect for logging in
+    useEffect(() => {
+        const checkSignedIn = async () => {
+            const signIn = await calendarApi.sign;
+            setSignedIn(signIn);
+        };
+        checkSignedIn();
+    }, [calendarApi]);
 
     // Functions for handling profile picture
     function changePicture(eventParam) {
@@ -45,8 +61,8 @@ export function Account() {
                     {/* Column 2 in the account panel */}
                     <div className="col-md-5 bg-secondary border" id="change-account">
                         <h4 className="account-name">John_Smith42</h4>
-                        <p id="connected-status" style={{color: "rgb(247, 130, 130)"}}>Google account not connected</p>
-                        <button type="button" className="btn btn-outline-light" id="link-google">Link Google Account</button>
+                        <p id="connected-status" style={{color: signedIn ? "rgb(130, 247, 130)" : "rgb(247, 130, 130)"}}>{signedIn ? "Google account connected" : "Google account not connected"}</p>
+                        {signedIn ? (<p/>) : (<button type="button" className="btn btn-outline-light" id="link-google" onClick={googleSignIn}>Link Google Account</button>)}
                         <br />
                         <button type="button" className="btn btn-outline-warning" id="logout">Log out</button>
             
